@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Quest Log</title>
+
+<style>
+
+body{
+background:#0f0f0f;
+font-family: Georgia, serif;
+color:#3b2f1b;
+display:flex;
+justify-content:center;
+margin-top:40px;
+}
+
+.panel{
+background:#e0c38c;
+width:420px;
+padding:25px;
+border:6px solid #5b3a1a;
+box-shadow:0 0 25px black;
+}
+
+h1{
+text-align:center;
+color:#5b3a1a;
+margin-bottom:20px;
+}
+
+.quest{
+display:flex;
+align-items:center;
+background:#f3e2b5;
+border:2px solid #a27b3f;
+padding:8px;
+margin:6px 0;
+}
+
+.quest span{
+margin-left:10px;
+}
+
+.completed{
+text-decoration:line-through;
+opacity:0.6;
+}
+
+input[type="text"]{
+width:70%;
+padding:6px;
+border:2px solid #a27b3f;
+background:#fff5d6;
+}
+
+button{
+background:#7a5a2b;
+color:white;
+border:none;
+padding:7px 10px;
+cursor:pointer;
+}
+
+.xpbar{
+margin-top:20px;
+background:#5b3a1a;
+height:20px;
+}
+
+.xpfill{
+background:#d4af37;
+height:100%;
+width:0%;
+}
+
+.level{
+margin-top:10px;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+<h1>📜 Quest Log</h1>
+
+<div id="quests"></div>
+
+<input id="newQuest" placeholder="Nouvelle quête...">
+<button onclick="addQuest()">Accepter</button>
+
+<div class="level">Niveau <span id="level">1</span></div>
+
+<div class="xpbar">
+<div id="xpfill" class="xpfill"></div>
+</div>
+
+</div>
+
+<script>
+
+let xp=0
+let level=1
+
+function save(){
+localStorage.setItem("quests",document.getElementById("quests").innerHTML)
+localStorage.setItem("xp",xp)
+localStorage.setItem("level",level)
+}
+
+function load(){
+
+if(localStorage.getItem("quests")){
+document.getElementById("quests").innerHTML=localStorage.getItem("quests")
+xp=parseInt(localStorage.getItem("xp"))
+level=parseInt(localStorage.getItem("level"))
+updateXP()
+}
+
+}
+
+function updateXP(){
+
+if(xp>=100){
+xp=0
+level++
+document.getElementById("level").innerText=level
+alert("LEVEL UP !")
+}
+
+document.getElementById("xpfill").style.width=xp+"%"
+save()
+
+}
+
+function addQuest(){
+
+let text=document.getElementById("newQuest").value
+if(text==="")return
+
+let quest=document.createElement("div")
+quest.className="quest"
+
+let check=document.createElement("input")
+check.type="checkbox"
+
+let label=document.createElement("span")
+label.innerText=text
+
+check.onclick=()=>{
+label.classList.toggle("completed")
+xp+=20
+updateXP()
+}
+
+quest.appendChild(check)
+quest.appendChild(label)
+
+document.getElementById("quests").appendChild(quest)
+
+document.getElementById("newQuest").value=""
+
+save()
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>
