@@ -107,7 +107,7 @@ width:0%;
 
 <div class="layout">
 
-<img class="avatar" src="https://static.wikia.nocookie.net/wowpedia/images/5/56/TaurenMale.jpg">
+<img class="avatar" src="tauren.png">
 
 <div class="panel">
 
@@ -151,5 +151,69 @@ if(localStorage.getItem("quests")){
 document.getElementById("quests").innerHTML=localStorage.getItem("quests")
 xp=parseInt(localStorage.getItem("xp")) || 0
 level=parseInt(localStorage.getItem("level")) || 1
-gold=parseInt(localStorage.get
+gold=parseInt(localStorage.getItem("gold")) || 0
 
+document.getElementById("level").innerText=level
+document.getElementById("gold").innerText=gold
+
+updateXP()
+}
+
+}
+
+function updateXP(){
+
+if(xp>=100){
+xp=0
+level++
+document.getElementById("level").innerText=level
+alert("LEVEL UP !")
+}
+
+document.getElementById("xpfill").style.width=xp+"%"
+save()
+
+}
+
+function addQuest(){
+
+let text=document.getElementById("newQuest").value
+if(text==="")return
+
+document.getElementById("acceptSound").play()
+
+let quest=document.createElement("div")
+quest.className="quest"
+
+let check=document.createElement("input")
+check.type="checkbox"
+
+let label=document.createElement("span")
+label.innerText=text
+
+check.onclick=()=>{
+label.classList.toggle("completed")
+xp+=20
+gold+=5
+document.getElementById("gold").innerText=gold
+updateXP()
+document.getElementById("completeSound").play()
+}
+
+quest.appendChild(check)
+quest.appendChild(label)
+
+document.getElementById("quests").appendChild(quest)
+
+document.getElementById("newQuest").value=""
+
+save()
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>
